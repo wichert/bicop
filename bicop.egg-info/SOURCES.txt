@@ -1,9 +1,0 @@
-setup.cfg
-setup.py
-bicop/__init__.py
-bicop.egg-info/PKG-INFO
-bicop.egg-info/SOURCES.txt
-bicop.egg-info/dependency_links.txt
-bicop.egg-info/entry_points.txt
-bicop.egg-info/not-zip-safe
-bicop.egg-info/top_level.txt
