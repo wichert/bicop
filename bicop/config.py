@@ -68,7 +68,7 @@ class ParseError(Exception):
         return "%s[%d]: %s" % (self.file, self.line, self.reason)
 
 
-def Parse(input, filename=None):
+def parse(input, filename=None):
     """Read a file in a ISC-like config style.
 
     @param input filename to read
