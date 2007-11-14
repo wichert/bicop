@@ -34,66 +34,65 @@ Here is a simple example showing how to use it::
 import types, UserDict
 
 class NestedDict(UserDict.UserDict):
-	"""Nested dictionary class
+    """Nested dictionary class
 
-	@ivar seperator: seperator string
-	@type seperator: string
-	"""
-	def __init__(self, dict=None):
-		self.seperator="/"
-		UserDict.UserDict.__init__(self, dict)
-
-
-	def __getitem__(self, key):
-		keys=key.split(self.seperator)
-		top=self.data
-		while len(keys)>1:
-			top=top[keys[0]]
-			keys=keys[1:]
-
-		if type(top[keys[0]])==types.DictType:
-			return NestedDict(top[keys[0]])
-		else:
-			return top[keys[0]]
+    @ivar seperator: seperator string
+    @type seperator: string
+    """
+    def __init__(self, dict=None):
+        self.seperator="/"
+        UserDict.UserDict.__init__(self, dict)
 
 
-	def __setitem__(self, key, item):
-		keys=key.split(self.seperator)
-		top=self.data
+    def __getitem__(self, key):
+        keys=key.split(self.seperator)
+        top=self.data
+        while len(keys)>1:
+            top=top[keys[0]]
+            keys=keys[1:]
 
-		while len(keys)>1:
-			if not top.has_key(keys[0]):
-				top[keys[0]]={}
-			top=top[keys[0]]
-			keys=keys[1:]
-
-		top[keys[0]]=item
-	
-
-	def __delitem__(self, key):
-		top=self.data
-
-		path=key.split(self.seperator)
-		(path, leaf)=(path[:-1], path[-1])
-
-		try:
-			for subkey in path:
-				top=top[subkey]
-		except KeyError:
-			raise KeyError, key
-
-		del top[leaf]
+        if type(top[keys[0]])==types.DictType:
+            return NestedDict(top[keys[0]])
+        else:
+            return top[keys[0]]
 
 
-	def has_key(self, key):
-		top=self.data
+    def __setitem__(self, key, item):
+        keys=key.split(self.seperator)
+        top=self.data
 
-		try:
-			for subkey in key.split(self.seperator):
-				top=top[subkey]
-		except KeyError:
-			return 0
+        while len(keys)>1:
+            if not top.has_key(keys[0]):
+                top[keys[0]]={}
+            top=top[keys[0]]
+            keys=keys[1:]
 
-		return 1
+        top[keys[0]]=item
+    
 
+    def __delitem__(self, key):
+        top=self.data
+
+        path=key.split(self.seperator)
+        (path, leaf)=(path[:-1], path[-1])
+
+        try:
+            for subkey in path:
+                top=top[subkey]
+        except KeyError:
+            raise KeyError, key
+
+        del top[leaf]
+
+
+    def has_key(self, key):
+        top=self.data
+
+        try:
+            for subkey in key.split(self.seperator):
+                top=top[subkey]
+        except KeyError:
+            return False
+
+        return True
 
