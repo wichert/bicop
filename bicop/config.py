@@ -1,6 +1,6 @@
 # config.py
 #
-# Copyright 2002 Wichert Akkerman <wichert@simplon.biz>
+# Copyright 2002,2007 Wichert Akkerman <wichert@simplon.biz>
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of version 2 of the GNU General Public License as
@@ -47,7 +47,7 @@ An example of a file in this format::
 
 __docformat__	= "epytext en"
 
-import shlex, UserDict, weakref
+import shlex
 
 class ParseError(Exception):
     """Parse error
@@ -129,9 +129,9 @@ def _Parse(input):
 
             if needsep:
                 seperator=input.get_token()
-                    if seperator!=";":
-                            raise ParseError, (input.infile, input.lineno, 
-                                    "Required seperator missing")
+                if seperator!=";":
+                    raise ParseError, (input.infile, input.lineno, 
+                            "Required seperator missing")
 
             command=input.get_token()
     except ValueError:

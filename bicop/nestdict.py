@@ -1,6 +1,6 @@
 # nestdict.py
 #
-# Copyright 2002 Wichert Akkerman <wichert@simplon.biz>
+# Copyright 2002,2007 Wichert Akkerman <wichert@simplon.biz>
 #
 # This file is free software; you can redistribute it and/or modify it
 # under the terms of version 2 of the GNU General Public License as
@@ -31,34 +31,39 @@ Here is a simple example showing how to use it::
   print "Password: " + dict["sql/password"]
 """
 
-import types, UserDict
+import UserDict
 
 class NestedDict(UserDict.UserDict):
     """Nested dictionary class
 
-    @ivar seperator: seperator string
-    @type seperator: string
+    @ivar separator: separator string
+    @type separator: string
     """
-    def __init__(self, dict=None):
-        self.seperator="/"
-        UserDict.UserDict.__init__(self, dict)
+    def __init__(self, dict=None, separator="/"):
+        self.separator=separator
+        # The UserDict constructor has the nasty tendency to copy the
+        # data. We can't have that.
+        if dict is not None:
+            self.data=dict
+        else:
+            self.data={}
 
 
     def __getitem__(self, key):
-        keys=key.split(self.seperator)
+        keys=key.split(self.separator)
         top=self.data
         while len(keys)>1:
             top=top[keys[0]]
             keys=keys[1:]
 
-        if type(top[keys[0]])==types.DictType:
+        if isinstance(top[keys[0]], dict):
             return NestedDict(top[keys[0]])
         else:
             return top[keys[0]]
 
 
     def __setitem__(self, key, item):
-        keys=key.split(self.seperator)
+        keys=key.split(self.separator)
         top=self.data
 
         while len(keys)>1:
@@ -73,7 +78,7 @@ class NestedDict(UserDict.UserDict):
     def __delitem__(self, key):
         top=self.data
 
-        path=key.split(self.seperator)
+        path=key.split(self.separator)
         (path, leaf)=(path[:-1], path[-1])
 
         try:
@@ -89,10 +94,13 @@ class NestedDict(UserDict.UserDict):
         top=self.data
 
         try:
-            for subkey in key.split(self.seperator):
+            for subkey in key.split(self.separator):
                 top=top[subkey]
         except KeyError:
             return False
 
         return True
 
+# TODO:
+# __contains__
+# setdefault
