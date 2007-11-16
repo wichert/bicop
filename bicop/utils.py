@@ -19,7 +19,7 @@ def merge(one, two, overwrite=False, typecheck=True):
         return
 
     if typecheck and not same_type(one, two):
-        raise ValuError, "Type mismatch"
+        raise ValueError, "Type mismatch"
 
     for (key,value) in two.items():
         if key not in one:
