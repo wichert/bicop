@@ -123,28 +123,24 @@ def _Parse(input):
                     needsep=0
                 elif value==";":
                     raise ParseError, (input.infile, input.lineno, 
-                            "Unexpected seperator found")
+                            "Unexpected separator found")
                 else:
                     top[command]=_Decode(value)
 
             if needsep:
-                seperator=input.get_token()
-                if seperator!=";":
+                separator=input.get_token()
+                if separator!=";":
                     raise ParseError, (input.infile, input.lineno, 
-                            "Required seperator missing")
+                            "Required separator missing")
 
             command=input.get_token()
     except ValueError:
         raise ParseError, (input.infile, input.lineno, "Illegal value")
+    except IndexError:
+        raise ParseError, (input.infile, input.lineno, "Unexpected end of file")
 
-    
     if stack:
         raise ParseError, (input.infile, input.lineno, "Unexpected end of file")
     
     return top
-
-
-if __name__=="__main__":
-    import sys
-    print _Parse(shlex.shlex(sys.stdin, "stdin"))
 
