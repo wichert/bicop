@@ -22,6 +22,9 @@ class SameTypeTests(TestCase):
 
 
 class MergeTests(TestCase):
+    def testMergingDifferentThings(self):
+        self.assertRaises(ValueError, merge, dict(), "")
+
     def testMergeToSelf(self):
         one=dict(one=1)
         original=one.copy()
