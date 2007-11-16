@@ -71,10 +71,11 @@ class ParseError(Exception):
 def parse(input, filename=None):
     """Read a file in a ISC-like config style.
 
-    @param input filename to read
-    @type input  string
-    @return:     the parser configuration
-    @rtype:      dictionary of dictionaries and strings
+    The input can be either a file-like object or a string. If a string
+    is used you can optionally also provide a filename, which will be
+    used for raised exceptions.
+
+    The contents from the file as returned as a standard python dictionary.
     """
 
     tokenizer=shlex.shlex(input, filename)
