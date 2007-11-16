@@ -5,8 +5,7 @@ version = '1.0'
 setup(name='bicop',
       version=version,
       description="Read bind-style configuration files",
-      long_description="""\
-""",
+      long_description=open("README.txt").read(),
       classifiers=[
           "Development Status :: 6 - Mature",
           "Intended Audience :: Developers",
