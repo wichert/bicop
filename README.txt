@@ -61,3 +61,18 @@ this a bit more pleasant on the eyes you can use the NestedDict wrapper::
   configuration=NestedDict(parse("/etc/application.conf"))
   print "Your signature is: %s" % configuration["profiles/user/signature"]
 
+
+Changes
+=======
+
+1.0rc2 - August 2, 20009
+------------------------
+
+* Add an optional dictclass parameter to the parse method. This can be
+  used to use alternative dictionary types, most typically ordered
+  dictionaries.
+
+* Drop dependency on nose to run tests.
+
+* Use ez_setup to automatically install setuptools if needed.
+
