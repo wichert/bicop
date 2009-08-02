@@ -68,7 +68,7 @@ class ParseError(Exception):
         return "%s[%d]: %s" % (self.file, self.line, self.reason)
 
 
-def parse(input, filename=None):
+def parse(input, filename=None, dictclass=dict):
     """Read a file in a ISC-like config style.
 
     The input can be either a file-like object or a string. If a string
@@ -80,7 +80,7 @@ def parse(input, filename=None):
 
     tokenizer=shlex.shlex(input, filename)
     tokenizer.wordchars+="/._"
-    return _Parse(tokenizer)
+    return _Parse(tokenizer, dictclass=dictclass)
 
 
 def _Decode(token):
@@ -90,10 +90,10 @@ def _Decode(token):
         return int(token)
 
 
-def _Parse(input):
+def _Parse(input, dictclass=dict):
     (type_list, type_dict)=(1, 2)
     stack=[]
-    top={}
+    top=dictclass()
 
     type=type_dict
 
@@ -116,7 +116,7 @@ def _Parse(input):
                         top[command]=[]
                     else:
                         type=type_dict;
-                        top[command]={}
+                        top[command]=dictclass()
                     input.push_token(two)
                     input.push_token(one)
                     stack.append(top)

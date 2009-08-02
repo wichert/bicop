@@ -19,6 +19,13 @@ class ParseTests(TestCase):
                 parse('key { 1; 2; };'),
                 dict(key=[1, 2]))
 
+    def testCustomDictClass(self):
+        class MyDict(dict):
+            pass
+
+        result=parse('key { 1; 2; };', dictclass=MyDict)
+        self.failUnless(isinstance(result, MyDict))
+
     def testNestedMap(self):
         self.assertEqual(
                 parse('parent { child { key "value"; }; };'),
