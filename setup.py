@@ -3,7 +3,7 @@ use_setuptools()
 
 from setuptools import setup, find_packages
 
-version = '1.0'
+version = '1.0rc2'
 
 setup(name='bicop',
       version=version,
