@@ -33,6 +33,7 @@ Here is a simple example showing how to use it::
 
 import UserDict
 
+
 class NestedDict(UserDict.UserDict):
     """Nested dictionary class
 
@@ -40,67 +41,64 @@ class NestedDict(UserDict.UserDict):
     @type separator: string
     """
     def __init__(self, dict=None, separator="/"):
-        self.separator=separator
+        self.separator = separator
         # The UserDict constructor has the nasty tendency to copy the
         # data. We can't have that.
         if dict is not None:
-            self.data=dict
+            self.data = dict
         else:
-            self.data={}
-
+            self.data = {}
 
     def __getitem__(self, key):
-        keys=key.split(self.separator)
-        top=self.data
-        while len(keys)>1:
-            top=top[keys[0]]
-            keys=keys[1:]
+        keys = key.split(self.separator)
+        top = self.data
+        while len(keys) > 1:
+            top = top[keys[0]]
+            keys = keys[1:]
 
         if isinstance(top[keys[0]], dict):
             return NestedDict(top[keys[0]])
         else:
             return top[keys[0]]
 
-
     def __setitem__(self, key, item):
-        keys=key.split(self.separator)
-        top=self.data
+        keys = key.split(self.separator)
+        top = self.data
 
-        while len(keys)>1:
-            if not top.has_key(keys[0]):
-                top[keys[0]]={}
-            top=top[keys[0]]
-            keys=keys[1:]
+        while len(keys) > 1:
+            if keys[0] not in top:
+                top[keys[0]] = {}
+            top = top[keys[0]]
+            keys = keys[1:]
 
-        top[keys[0]]=item
-    
+        top[keys[0]] = item
 
     def __delitem__(self, key):
-        top=self.data
+        top = self.data
 
-        path=key.split(self.separator)
-        (path, leaf)=(path[:-1], path[-1])
+        path = key.split(self.separator)
+        (path, leaf) = (path[:-1], path[-1])
 
         try:
             for subkey in path:
-                top=top[subkey]
+                top = top[subkey]
         except KeyError:
-            raise KeyError, key
+            raise KeyError(key)
 
         del top[leaf]
 
-
-    def has_key(self, key):
-        top=self.data
+    def __contains__(self, key):
+        top = self.data
 
         try:
             for subkey in key.split(self.separator):
-                top=top[subkey]
+                top = top[subkey]
         except KeyError:
             return False
 
         return True
 
+    has_key = __contains__
+
 # TODO:
-# __contains__
 # setdefault

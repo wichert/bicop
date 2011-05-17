@@ -2,6 +2,7 @@ from unittest import TestCase
 from bicop.config import parse
 from bicop.config import ParseError
 
+
 class ParseTests(TestCase):
     def testSingleString(self):
         self.assertEqual(parse('key "value";'), dict(key="value"))
@@ -23,7 +24,7 @@ class ParseTests(TestCase):
         class MyDict(dict):
             pass
 
-        result=parse('key { 1; 2; };', dictclass=MyDict)
+        result = parse('key { 1; 2; };', dictclass=MyDict)
         self.failUnless(isinstance(result, MyDict))
 
     def testNestedMap(self):
@@ -34,7 +35,7 @@ class ParseTests(TestCase):
     def testMissingSeparatorInList(self):
         try:
             parse('key {1 2};', filename="stdin")
-        except ParseError,e:
+        except ParseError as e:
             self.assertEqual(e.file, "stdin")
             self.assertEqual(e.line, 1)
             self.assertEqual(e.reason, "Required separator missing")
@@ -45,7 +46,7 @@ class ParseTests(TestCase):
     def testMissingSeparatorInListOnLineTwo(self):
         try:
             parse('key {\n1 2};', filename="stdin")
-        except ParseError,e:
+        except ParseError as e:
             self.assertEqual(e.file, "stdin")
             self.assertEqual(e.line, 2)
             self.assertEqual(e.reason, "Required separator missing")
@@ -56,7 +57,7 @@ class ParseTests(TestCase):
     def testIllegalValue(self):
         try:
             parse('key {bla};', filename="stdin")
-        except ParseError,e:
+        except ParseError as e:
             self.assertEqual(e.reason, "Illegal value")
         else:
             self.fail("ParseError not thrown")
@@ -64,7 +65,7 @@ class ParseTests(TestCase):
     def testUnexpectedEndOfFile(self):
         try:
             parse('key ')
-        except ParseError,e:
+        except ParseError as e:
             self.assertEqual(e.reason, "Unexpected end of file")
         else:
             self.fail("ParseError not thrown")
@@ -72,7 +73,7 @@ class ParseTests(TestCase):
     def testUnexpectedEndOfFileWithoutToken(self):
         try:
             parse('key { "one";')
-        except ParseError,e:
+        except ParseError as e:
             self.assertEqual(e.reason, "Unexpected end of file")
         else:
             self.fail("ParseError not thrown")

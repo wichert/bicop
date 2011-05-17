@@ -3,6 +3,7 @@ def same_type(one, two):
 
     return isinstance(one, type(two))
 
+
 def merge(one, two, overwrite=False, typecheck=True):
     """Merge data from another configuration space into this one.
 
@@ -19,18 +20,17 @@ def merge(one, two, overwrite=False, typecheck=True):
         return
 
     if typecheck and not same_type(one, two):
-        raise ValueError, "Type mismatch"
+        raise ValueError('Type mismatch')
 
-    for (key,value) in two.items():
+    for (key, value) in two.items():
         if key not in one:
-            one[key]=value
+            one[key] = value
 
         if typecheck and not same_type(one[key], value):
-            raise ValueError, "Type mismatch"
+            raise ValueError('Type mismatch')
         if isinstance(value, dict):
             merge(one[key], two[key], overwrite, typecheck)
         elif not overwrite:
             continue
         else:
-            one[key]=two[key]
-
+            one[key] = two[key]
