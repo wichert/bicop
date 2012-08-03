@@ -31,10 +31,13 @@ Here is a simple example showing how to use it::
   print "Password: " + dict["sql/password"]
 """
 
-import UserDict
+try:
+    from collections import UserDict
+except ImportError:
+    from UserDict import UserDict
 
 
-class NestedDict(UserDict.UserDict):
+class NestedDict(UserDict):
     """Nested dictionary class
 
     @ivar separator: separator string
